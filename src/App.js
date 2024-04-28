@@ -1,23 +1,68 @@
-import logo from './logo.svg';
-import './App.css';
+import "./App.css";
+import { useState } from "react";
+import { useEffect } from "react";
 
 function App() {
+  const key = process.env.REACT_APP_KEY;
+  const [city, setCity] = useState("");
+  const [loading, setLoading] = useState(false);
+  const [weather, setWeather] = useState({});
+
+  const fetchWeather = async (key, city) => {
+    setLoading(true);
+    try {
+      const response = await fetch(
+        `https://api.weatherapi.com/v1/current.json?key=${key}&q=${city}`
+      );
+
+      const data = await response.json();
+
+      if (data.error) {
+        alert("Failed to fetch weather data");
+      }
+      setWeather(data);
+    } catch (error) {
+      console.error("Failed to fetch weather data");
+    } finally {
+      setLoading(false);
+    }
+  };
+
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
+      <div>
+        <input type="text" onChange={(e) => setCity(e.target.value)} />
+        <button
+          type="button"
+          onClick={(e) => {
+            console.log("I was clicked");
+            fetchWeather(key, city);
+          }}
         >
-          Learn React
-        </a>
-      </header>
+          Search
+        </button>
+      </div>
+      {loading && <p>Loading data...</p>}
+      {!loading && weather.current && Object.keys(weather).length > 0 && (
+        <div className="weather-cards">
+          <div className="weather-card">
+            <h3>Temperature</h3>
+            <p>{weather.current.temp_c}°C</p>
+          </div>
+          <div className="weather-card">
+            <h3>Humidity</h3>
+            <p>{weather.current.humidity}%</p>
+          </div>
+          <div className="weather-card">
+            <h3>Condition</h3>
+            <p>{weather.current.condition.text}</p>
+          </div>
+          <div className="weather-card">
+            <h3>Wind Speed</h3>
+            <p>{weather.current.wind_kph} kph</p>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
