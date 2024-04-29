@@ -3,14 +3,19 @@ import { useState } from "react";
 import { useEffect } from "react";
 
 function App() {
-  const key = process.env.REACT_APP_KEY;
+  const key = 'f326947bd00f441b85280502232909';
+ 
+
+
   const [city, setCity] = useState("");
   const [loading, setLoading] = useState(false);
   const [weather, setWeather] = useState({});
 
   const fetchWeather = async (key, city) => {
     setLoading(true);
+    console.log(key,city);
     try {
+
       const response = await fetch(
         `https://api.weatherapi.com/v1/current.json?key=${key}&q=${city}`
       );
