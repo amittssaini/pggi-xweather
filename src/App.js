@@ -2,10 +2,11 @@ import "./App.css";
 import { useState } from "react";
 import { useEffect } from "react";
 import SearchCountries from "./SearchCountry";
+import App2 from "./App2";
 
 function App() {
   return(
-   < SearchCountries/>
+   < App2/>
   )
   // const key = 'f326947bd00f441b85280502232909';
  
